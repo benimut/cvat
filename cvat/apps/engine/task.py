@@ -1827,7 +1827,7 @@ def initialize_task(
         }
 
         if (
-            media_type in {"archive", "zip", "pdf"}
+            media_type in {"archive", "zip", "pdf", "dicom"}
             and db_data.storage == models.StorageChoice.SHARE
         ):
             details["extract_dir"] = db_data.get_upload_dirname()
@@ -2123,6 +2123,7 @@ def _create_static_chunks(
                 MEDIA_TYPES["image"]["extractor"],
                 MEDIA_TYPES["zip"]["extractor"],
                 MEDIA_TYPES["pdf"]["extractor"],
+                MEDIA_TYPES["dicom"]["extractor"],
                 MEDIA_TYPES["archive"]["extractor"],
             ),
         ):

@@ -496,6 +496,105 @@ class PdfReader(ImageListReader):
         )
 
 
+class DicomReader(ImageListReader):
+    """
+    DICOM 檔案讀取器，支援多影格（Multi-frame）與單張 DICOM 影像解析，
+    自動處理色彩空間轉換（YBR 轉 RGB）與數值正規化，並輸出序列影格供 CVAT 標註。
+    """
+    def __init__(
+        self,
+        source_paths: list[Path],
+        step=1,
+        start=0,
+        stop=None,
+        dimension=DimensionType.DIM_2D,
+        sorting_method=SortingMethod.PREDEFINED,
+        extract_dir=None,
+    ):
+        (self._dicom_source,) = source_paths
+        _basename = os.path.splitext(os.path.basename(self._dicom_source))[0]
+
+        from pydicom import dcmread
+        from pydicom.pixel_data_handlers.util import convert_color_space
+
+        self._tmp_dir = extract_dir if extract_dir else os.path.dirname(self._dicom_source)
+        os.makedirs(self._tmp_dir, exist_ok=True)
+
+        extracted_paths: list[Path] = []
+
+        with dcmread(str(self._dicom_source)) as ds:
+            pixel_array = ds.pixel_array
+            photo = getattr(ds, "PhotometricInterpretation", "")
+            num_frames = getattr(ds, "NumberOfFrames", None)
+
+            is_multiframe = False
+            if num_frames is not None and int(num_frames) > 1:
+                is_multiframe = True
+            elif pixel_array.ndim == 4:
+                is_multiframe = True
+            elif pixel_array.ndim == 3 and pixel_array.shape[2] != 3:
+                is_multiframe = True
+
+            if not is_multiframe:
+                frames_iter = [pixel_array]
+            else:
+                frames_iter = pixel_array
+
+            total_frames = len(frames_iter)
+            pad_len = max(len(str(total_frames)), 4)
+            stop_idx = stop if stop is not None else total_frames - 1
+
+            for idx, frame in enumerate(frames_iter):
+                if idx < start or idx > stop_idx or (idx - start) % step != 0:
+                    continue
+
+                cur_frame = frame
+                if "YBR" in photo:
+                    try:
+                        cur_frame = convert_color_space(cur_frame, photo, "RGB")
+                    except Exception:
+                        pass
+
+                if cur_frame.dtype == np.uint8:
+                    img = Image.fromarray(cur_frame)
+                elif cur_frame.dtype == np.uint16:
+                    min_val = cur_frame.min()
+                    max_val = cur_frame.max()
+                    if max_val > min_val:
+                        norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                        img = Image.fromarray(norm)
+                    else:
+                        img = Image.fromarray(cur_frame.astype(np.uint8))
+                else:
+                    min_val = cur_frame.min()
+                    max_val = cur_frame.max()
+                    if max_val > min_val:
+                        norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                    else:
+                        norm = np.zeros_like(cur_frame, dtype=np.uint8)
+                    img = Image.fromarray(norm)
+
+                frame_name = "{}_{}.png".format(_basename, str(idx).zfill(pad_len))
+                frame_path = os.path.join(self._tmp_dir, frame_name)
+                img.save(frame_path, format="PNG")
+                extracted_paths.append(Path(frame_path))
+
+        if not extract_dir and os.path.exists(self._dicom_source):
+            try:
+                os.remove(self._dicom_source)
+            except OSError:
+                pass
+
+        super().__init__(
+            source_paths=extracted_paths,
+            step=1,
+            start=0,
+            stop=None,
+            dimension=dimension,
+            sorting_method=sorting_method,
+        )
+
+
 class ZipReader(ImageListReader):
     def __init__(
         self,
@@ -1527,7 +1626,46 @@ def _is_zip(path):
 #           True - only one item of this type and no other is allowed
 #           False - this media types can be combined with other which have unique is False
 
+def _is_dicom(path):
+    """
+    檢查檔案是否為合法的 DICOM 影像檔案（支援無副檔名或 .dcm），
+    並確認具備像素資料（排除 DICOMDIR 與文字報告 SR）。
+    """
+    if os.path.isdir(path):
+        return False
+    try:
+        p = Path(path)
+        if not p.is_file() or p.stat().st_size < 132:
+            return False
+
+        with open(p, "rb") as f:
+            f.seek(128)
+            magic = f.read(4)
+
+        if magic == b"DICM" or p.suffix.lower() == ".dcm":
+            from pydicom import dcmread
+            try:
+                ds = dcmread(str(p), stop_before_pixels=True)
+                if getattr(ds, "SOPClassUID", "") == "1.2.840.10008.1.3.10" or getattr(ds, "Modality", "") == "SR":
+                    return False
+                if "PixelData" not in ds and not hasattr(ds, "NumberOfFrames") and not hasattr(ds, "Rows"):
+                    return False
+                return True
+            except Exception:
+                return False
+    except Exception:
+        pass
+    return False
+
+
 MEDIA_TYPES = {
+    "dicom": {
+        "has_mime_type": _is_dicom,
+        "extractor": DicomReader,
+        "mode": TaskMode.INTERPOLATION,
+        "unique": True,
+    },
+
     "image": {
         "has_mime_type": _is_image,
         "extractor": ImageListReader,
