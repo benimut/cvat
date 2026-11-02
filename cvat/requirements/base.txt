@@ -204,6 +204,7 @@ pandas==2.3.0
 patool==4.1.0
     # via -r cvat/requirements/base.in
 pdf2image==1.17.0
+pydicom~=3.0
     # via -r cvat/requirements/base.in
 portalocker==3.2.0
     # via datumaro
