@@ -500,10 +500,16 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     """
     自動偵測超音波扇形區域並生成去黑遮罩。
 
-    透過 Canny 邊緣偵測與 HoughLinesP 直線檢測，識別超音波扇形的左斜邊與右斜邊射線，
-    計算其直線交點作為頂點圓心（Apex）、起始與結束角度以及外半徑，
-    繪製保留尖端至圓心的扇形 Mask，並透過形態學膨脹向外擴張 expand_px 容錯。
-    若左右射線未同時偵測到（代表非扇形超音波影像），則返回 None。
+    演算法流程：
+    1. 將輸入影格轉為灰階，若尺寸過小（< 80x80）則直接返回 None。
+    2. 二值化並透過大結構元素閉運算（MORPH_CLOSE）填平心臟內部所有組織回波與心室暗腔，
+       形成實心連通區域。
+    3. 提取最大輪廓（面積需大於影像面積 10%），繪製乾淨的實心遮罩。
+    4. 對實心遮罩執行 Canny 邊緣偵測與 HoughLinesP 直線檢測，識別外邊界的左斜邊與右斜邊射線。
+    5. 選取長度最長之左斜邊與右斜邊求解直線交點 (cx, cy) 作為 Apex。
+    6. 執行中心對稱與頂部合理性校驗（0.35w <= cx <= 0.65w 且 0 <= cy <= 0.40h）。
+    7. 計算輪廓至 Apex 距離（99.5 百分位）作為最大外半徑 r_max，繪製保留尖端至圓心的扇形 Mask。
+    8. 若 expand_px > 0 則透過形態學膨脹向外擴張指定像素大小容錯。
 
     參數：
         frame_np (np.ndarray): 輸入影格（RGB 或灰階 uint8 影像矩陣）。
@@ -528,9 +534,28 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     if h < 80 or w < 80:
         return None
 
-    # 使用 Canny (30, 100) 與 HoughLinesP 偵測直線段
-    edges = cv2.Canny(gray, 30, 100)
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=70, minLineLength=80, maxLineGap=15)
+    # 二值化
+    _, thresh = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
+    # 閉運算填平心臟內部所有組織回波與心室暗腔
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (35, 35))
+    closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    # 找出最大連通區域（扇形本體，面積需 > 10% 影像面積）
+    contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return None
+
+    max_cnt = max(contours, key=cv2.contourArea)
+    area = float(cv2.contourArea(max_cnt))
+    if area < 0.10 * (h * w):
+        return None
+
+    solid_mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.drawContours(solid_mask, [max_cnt], -1, 255, -1)
+
+    # 僅對乾淨實心 mask 執行 Canny 與 HoughLinesP，避免心臟內部組織回波干擾
+    edges = cv2.Canny(solid_mask, 50, 150)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=60, maxLineGap=10)
     if lines is None:
         return None
 
@@ -542,20 +567,20 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
         dx = x2 - x1
         dy = y2 - y1
         length = float(np.hypot(dx, dy))
-        if length <= 80:
+        if length < 60:
             continue
         angle = float(np.degrees(np.arctan2(dy, dx))) % 180.0
-        # 篩選左斜邊（angle 約 125°~145°）與右斜邊（angle 約 35°~55°）
-        if 125.0 <= angle <= 145.0:
+        # 篩選左斜邊（angle 約 120°~150°）與右斜邊（angle 約 30°~60°）
+        if 120.0 <= angle <= 150.0:
             left_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
-        elif 35.0 <= angle <= 55.0:
+        elif 30.0 <= angle <= 60.0:
             right_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
 
-    # 若未同時成功偵測到左右射線，代表非扇形超音波
+    # 若未同時成功偵測到左右外射線，代表非扇形超音波
     if not left_lines or not right_lines:
         return None
 
-    # 選取長度最長的左射線與右射線
+    # 選取長度最長的外射線求解交點作為頂點圓心（Apex）
     left_lines.sort(key=lambda x: x[0], reverse=True)
     right_lines.sort(key=lambda x: x[0], reverse=True)
 
@@ -578,16 +603,21 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     cx = (C1 * B2 - C2 * B1) / det
     cy = (A1 * C2 - A2 * C1) / det
 
-    # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度與外半徑
+    # 中心對稱校驗：頂點 cx 需位於水平中央區域且 cy 位於頂部
+    if not (0.35 * w <= cx <= 0.65 * w and 0.0 <= cy <= 0.40 * h):
+        return None
+
+    # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度
     l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
     r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
 
     ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
     ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
 
-    r_l = float(np.hypot(l_furthest[0] - cx, l_furthest[1] - cy))
-    r_r = float(np.hypot(r_furthest[0] - cx, r_furthest[1] - cy))
-    r_max = int(np.ceil(max(r_l, r_r)))
+    # 由實心輪廓點至 Apex 的最大距離（99.5 百分位）確定最大外半徑
+    cnt_pts = max_cnt.reshape(-1, 2)
+    dists = np.hypot(cnt_pts[:, 0] - cx, cnt_pts[:, 1] - cy)
+    r_max = int(np.ceil(np.percentile(dists, 99.5)))
 
     start_angle = min(ang_l, ang_r)
     end_angle = max(ang_l, ang_r)
@@ -600,8 +630,8 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     # 使用形態學膨脹向外擴張 expand_px 容錯
     if expand_px > 0:
         ksize = expand_px * 2 + 1
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
-        mask = cv2.dilate(mask, kernel)
+        kernel_expand = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
+        mask = cv2.dilate(mask, kernel_expand)
 
     return mask
 
