@@ -496,10 +496,120 @@ class PdfReader(ImageListReader):
         )
 
 
+def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> np.ndarray | None:
+    """
+    自動偵測超音波扇形區域並生成去黑遮罩。
+
+    透過 Canny 邊緣偵測與 HoughLinesP 直線檢測，識別超音波扇形的左斜邊與右斜邊射線，
+    計算其直線交點作為頂點圓心（Apex）、起始與結束角度以及外半徑，
+    繪製保留尖端至圓心的扇形 Mask，並透過形態學膨脹向外擴張 expand_px 容錯。
+    若左右射線未同時偵測到（代表非扇形超音波影像），則返回 None。
+
+    參數：
+        frame_np (np.ndarray): 輸入影格（RGB 或灰階 uint8 影像矩陣）。
+        expand_px (int): 遮罩整體向外擴張之像素大小（預設 5px）。
+
+    返回：
+        np.ndarray | None: 二值遮罩（uint8，扇形內部為 255，扇形外為 0），若非扇形則為 None。
+    """
+    import cv2
+
+    if frame_np is None or frame_np.size == 0:
+        return None
+
+    if frame_np.ndim == 3:
+        gray = cv2.cvtColor(frame_np, cv2.COLOR_RGB2GRAY)
+    elif frame_np.ndim == 2:
+        gray = frame_np
+    else:
+        return None
+
+    h, w = gray.shape[:2]
+    if h < 80 or w < 80:
+        return None
+
+    # 使用 Canny (30, 100) 與 HoughLinesP 偵測直線段
+    edges = cv2.Canny(gray, 30, 100)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=70, minLineLength=80, maxLineGap=15)
+    if lines is None:
+        return None
+
+    left_lines: list[tuple[float, tuple[int, int, int, int]]] = []
+    right_lines: list[tuple[float, tuple[int, int, int, int]]] = []
+
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        dx = x2 - x1
+        dy = y2 - y1
+        length = float(np.hypot(dx, dy))
+        if length <= 80:
+            continue
+        angle = float(np.degrees(np.arctan2(dy, dx))) % 180.0
+        # 篩選左斜邊（angle 約 125°~145°）與右斜邊（angle 約 35°~55°）
+        if 125.0 <= angle <= 145.0:
+            left_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
+        elif 35.0 <= angle <= 55.0:
+            right_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
+
+    # 若未同時成功偵測到左右射線，代表非扇形超音波
+    if not left_lines or not right_lines:
+        return None
+
+    # 選取長度最長的左射線與右射線
+    left_lines.sort(key=lambda x: x[0], reverse=True)
+    right_lines.sort(key=lambda x: x[0], reverse=True)
+
+    _, (lx1, ly1, lx2, ly2) = left_lines[0]
+    _, (rx1, ry1, rx2, ry2) = right_lines[0]
+
+    # 直線方程式 A*x + B*y = C 計算頂點圓心（Apex）交點
+    A1 = ly2 - ly1
+    B1 = lx1 - lx2
+    C1 = A1 * lx1 + B1 * ly1
+
+    A2 = ry2 - ry1
+    B2 = rx1 - rx2
+    C2 = A2 * rx1 + B2 * ry1
+
+    det = A1 * B2 - A2 * B1
+    if abs(det) < 1e-5:
+        return None
+
+    cx = (C1 * B2 - C2 * B1) / det
+    cy = (A1 * C2 - A2 * C1) / det
+
+    # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度與外半徑
+    l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+    r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+
+    ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
+    ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
+
+    r_l = float(np.hypot(l_furthest[0] - cx, l_furthest[1] - cy))
+    r_r = float(np.hypot(r_furthest[0] - cx, r_furthest[1] - cy))
+    r_max = int(np.ceil(max(r_l, r_r)))
+
+    start_angle = min(ang_l, ang_r)
+    end_angle = max(ang_l, ang_r)
+
+    # 繪製扇形 Mask（尖端保留至圓心，即 r_min = 0）
+    mask = np.zeros((h, w), dtype=np.uint8)
+    center = (int(round(cx)), int(round(cy)))
+    cv2.ellipse(mask, center, (r_max, r_max), 0, start_angle, end_angle, 255, -1)
+
+    # 使用形態學膨脹向外擴張 expand_px 容錯
+    if expand_px > 0:
+        ksize = expand_px * 2 + 1
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
+        mask = cv2.dilate(mask, kernel)
+
+    return mask
+
+
 class DicomReader(ImageListReader):
     """
     DICOM 檔案讀取器，支援多影格（Multi-frame）與單張 DICOM 影像解析，
-    自動處理色彩空間轉換（YBR 轉 RGB）與數值正規化，並輸出序列影格供 CVAT 標註。
+    自動處理色彩空間轉換（YBR 轉 RGB）、超音波扇形去黑遮罩與數值正規化，並輸出序列影格供 CVAT 標註。
     """
     def __init__(
         self,
@@ -549,6 +659,7 @@ class DicomReader(ImageListReader):
             total_frames = len(frames_iter)
             pad_len = max(len(str(total_frames)), 4)
             stop_idx = stop if stop is not None else total_frames - 1
+            sector_mask = None
 
             for idx, frame in enumerate(frames_iter):
                 # 若已超過 stop 影格則提早結束解碼（遵循與 PdfReader 相同的設計模式）
@@ -565,15 +676,15 @@ class DicomReader(ImageListReader):
                         pass
 
                 if cur_frame.dtype == np.uint8:
-                    img = Image.fromarray(cur_frame)
+                    frame_arr = cur_frame
                 elif cur_frame.dtype == np.uint16:
                     min_val = cur_frame.min()
                     max_val = cur_frame.max()
                     if max_val > min_val:
                         norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
-                        img = Image.fromarray(norm)
+                        frame_arr = norm
                     else:
-                        img = Image.fromarray(cur_frame.astype(np.uint8))
+                        frame_arr = cur_frame.astype(np.uint8)
                 else:
                     min_val = cur_frame.min()
                     max_val = cur_frame.max()
@@ -581,7 +692,18 @@ class DicomReader(ImageListReader):
                         norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
                     else:
                         norm = np.zeros_like(cur_frame, dtype=np.uint8)
-                    img = Image.fromarray(norm)
+                    frame_arr = norm
+
+                # 於第 0 幀偵測超音波扇形遮罩
+                if idx == 0:
+                    sector_mask = _detect_ultrasound_sector_mask(frame_arr)
+
+                # 若偵測到扇形遮罩，套用遮罩進行扇形外圍去黑處理
+                if sector_mask is not None:
+                    import cv2
+                    frame_arr = cv2.bitwise_and(frame_arr, frame_arr, mask=sector_mask)
+
+                img = Image.fromarray(frame_arr)
 
                 frame_name = "{}_{}.png".format(_basename, str(idx).zfill(pad_len))
                 frame_path = os.path.join(self._tmp_dir, frame_name)
