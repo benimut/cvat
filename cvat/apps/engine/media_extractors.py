@@ -710,12 +710,6 @@ class DicomReader(ImageListReader):
                 img.save(frame_path, format="PNG")
                 extracted_paths.append(Path(frame_path))
 
-        if not extract_dir and os.path.exists(self._dicom_source):
-            try:
-                os.remove(self._dicom_source)
-            except OSError:
-                pass
-
         super().__init__(
             source_paths=extracted_paths,
             step=step,
