@@ -3,8 +3,14 @@ FROM cvat/server:dev
 
 USER root
 
-# 安裝 DICOM 解析套件 (pydicom)
-RUN pip install --no-cache-dir pydicom~=3.0
+# 官方映像檔在最終階段為了安全性卸載了 pip (CVE-2018-20225)
+# 此處透過 apt 臨時安裝 python3-pip，完成安裝 pydicom 後立即清理快取與移除 pip
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3-pip && \
+    python3 -m pip install --no-cache-dir --break-system-packages pydicom~=3.0 && \
+    apt-get purge -y python3-pip && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # 複製修改後的 CVAT 後端程式碼至容器內
 COPY cvat /home/django/cvat
