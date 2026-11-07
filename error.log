@@ -1,0 +1,900 @@
+cvat_server  | 2026-11-07 07:19:31,339 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:31 [error] 237#237: *49 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:31,340 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.5 - - [07/Nov/2026:07:19:31 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:31,943 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:31 [error] 237#237: *1 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.6, server: _, request: "GET /api/server/health/?format=json&org= HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/server/health/?format=json&org=", host: "localhost:8080", referrer: "http://localhost:8080/"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:31,943 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.6 - - [07/Nov/2026:07:19:31 +0000] "GET /api/server/health/?format=json&org= HTTP/1.1" 502 552 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:34,950 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:34 [error] 237#237: *1 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.6, server: _, request: "GET /api/server/health/?format=json&org= HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/server/health/?format=json&org=", host: "localhost:8080", referrer: "http://localhost:8080/"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:34,951 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.6 - - [07/Nov/2026:07:19:34 +0000] "GET /api/server/health/?format=json&org= HTTP/1.1" 502 552 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:37,956 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:37 [error] 237#237: *1 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.6, server: _, request: "GET /api/server/health/?format=json&org= HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/server/health/?format=json&org=", host: "localhost:8080", referrer: "http://localhost:8080/"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:37,956 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.6 - - [07/Nov/2026:07:19:37 +0000] "GET /api/server/health/?format=json&org= HTTP/1.1" 502 552 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:40,963 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:40 [error] 237#237: *1 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.6, server: _, request: "GET /api/server/health/?format=json&org= HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/server/health/?format=json&org=", host: "localhost:8080", referrer: "http://localhost:8080/"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:40,963 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.6 - - [07/Nov/2026:07:19:40 +0000] "GET /api/server/health/?format=json&org= HTTP/1.1" 502 552 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:43,714 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:43 [error] 237#237: *55 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:43,715 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.5 - - [07/Nov/2026:07:19:43 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:43,970 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:43 [error] 237#237: *1 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.6, server: _, request: "GET /api/server/health/?format=json&org= HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/server/health/?format=json&org=", host: "localhost:8080", referrer: "http://localhost:8080/"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:43,970 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.6 - - [07/Nov/2026:07:19:43 +0000] "GET /api/server/health/?format=json&org= HTTP/1.1" 502 552 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:59,645 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:19:59 [error] 237#237: *58 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:19:59,646 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.5 - - [07/Nov/2026:07:19:59 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:20:12,674 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:20:12 [error] 237#237: *60 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:20:12,675 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.5 - - [07/Nov/2026:07:20:12 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:20:27,186 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:20:27 [error] 237#237: *62 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:20:27,187 DEBG 'nginx-0' stdout output:
+cvat_server  | 172.18.0.5 - - [07/Nov/2026:07:20:27 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server  | 
+cvat_server  | 2026-11-07 07:20:43,606 DEBG 'nginx-0' stderr output:
+cvat_server  | 2026/11/07 07:20:43 [error] 237#237: *64 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server  | 
+cvat_worker_export  | 2026-11-07 07:28:48,981 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:48,980] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:49,988 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:49,987] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:50,993 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:50,992] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:52,000 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:52,000] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:53,002 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:53,002] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:54,007 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:54,007] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:55,012 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 2026-11-07 07:28:49,634 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:49,633] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | [2026-11-07 07:28:55,011] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:56,019 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:50,641 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:50,640] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:51,650 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:51,649] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | [2026-11-07 07:28:56,018] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:52,658 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:52,657] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:53,663 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:53,663] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:54,671 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:54,670] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:55,676 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:55,676] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:56,684 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:56,683] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | 2026-11-07 07:28:57,022 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:57,021] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:28:58,029 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:58,028] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:28:57,691 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:57,691] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | 2026-11-07 07:28:59,031 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:28:59,030] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:00,032 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 2026-11-07 07:28:58,698 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:58,698] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | [2026-11-07 07:29:00,031] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:01,036 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:01,035] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_import  | 2026-11-07 07:28:59,706 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:28:59,705] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:00,709 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:00,709] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:01,715 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:01,714] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:02,719 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:02,718] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:03,727 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:03,726] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:02,042 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:02,041] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:03,049 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:03,047] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:04,734 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:04,733] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:05,740 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:05,739] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:06,742 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:06,741] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_server         | 2026-11-07 07:20:43,607 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:20:43 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:20:55,942 DEBG 'nginx-0' stderr output:
+cvat_worker_export  | 2026-11-07 07:29:04,057 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:04,055] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:05,062 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:05,061] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:06,065 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:06,064] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:07,070 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:07,070] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:08,073 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:08,073] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:09,076 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:09,075] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:07,744 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:10,078 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:10,077] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:11,082 DEBG 'rqworker-1' stderr output:
+cvat_server         | 2026/11/07 07:20:55 [error] 237#237: *66 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:20:55,943 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:20:55 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:10,480 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:21:10 [error] 237#237: *68 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:10,480 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:21:10 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_worker_export  | [2026-11-07 07:29:11,081] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:26,395 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:21:26 [error] 237#237: *70 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:26,395 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:21:26 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:43,634 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:21:43 [error] 237#237: *72 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:43,635 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:21:43 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_worker_import  | [2026-11-07 07:29:07,743] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:08,750 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:08,749] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | 2026-11-07 07:29:12,089 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:12,088] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:13,097 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:13,096] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:14,103 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:14,103] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:15,106 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:15,105] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:16,114 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:16,113] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:17,118 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:17,118] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:18,126 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:18,125] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:19,134 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:19,133] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:20,138 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 2026-11-07 07:29:09,758 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:09,757] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:10,766 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:10,765] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:58,129 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:21:58 [error] 237#237: *74 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:21:58,129 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:21:58 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:11,625 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:22:11 [error] 237#237: *76 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:11,773 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:11,773] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:12,781 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:12,780] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:13,783 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:13,783] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:11,625 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:22:11 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:29,587 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:22:29 [error] 237#237: *78 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:29,588 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:22:29 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:43,427 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:22:43 [error] 237#237: *80 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:43,427 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:22:43 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:56,104 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:22:56 [error] 237#237: *82 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:22:56,105 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:22:56 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:09,396 DEBG 'nginx-0' stderr output:
+cvat_worker_import  | 2026-11-07 07:29:14,789 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:14,789] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:15,796 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:15,796] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:16,804 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:16,803] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:17,809 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:17,809] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:18,816 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:18,815] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:19,820 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:19,819] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:20,821 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:20,820] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:21,826 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:21,825] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:22,830 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:22,830] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | [2026-11-07 07:29:20,137] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:21,140 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:21,139] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_server         | 2026/11/07 07:23:09 [error] 237#237: *84 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:09,396 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:23:09 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_worker_import  | 2026-11-07 07:29:23,836 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:23,835] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:24,838 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:24,838] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_server         | 2026-11-07 07:23:22,157 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:23:22 [error] 236#236: *86 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:22,157 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:23:22 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:36,026 DEBG 'nginx-0' stderr output:
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:25,841 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:25,841] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:22,147 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:22,146] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:23,151 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 2026-11-07 07:29:26,846 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:26,846] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:27,847 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:27,847] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:28,851 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:28,850] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:29,859 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:29,858] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:30,861 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:30,861] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:31,864 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:31,863] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:32,871 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:32,871] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | [2026-11-07 07:29:23,151] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:24,155 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:24,155] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:25,163 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:25,163] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:26,171 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:26,171] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:27,179 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:27,178] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:28,185 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:28,185] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:29,190 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:29,189] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:33,876 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:33,875] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:34,876 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:34,876] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:35,884 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:35,883] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:36,890 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:36,889] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:37,892 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:37,892] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:38,900 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:38,899] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:39,906 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:39,906] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:40,910 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:40,909] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:41,910 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:41,910] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:42,918 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:42,917] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:43,923 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:43,922] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:30,196 DEBG 'rqworker-1' stderr output:
+cvat_server         | 2026/11/07 07:23:36 [error] 236#236: *88 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_worker_export  | [2026-11-07 07:29:30,195] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:31,204 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:31,203] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:32,212 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:32,211] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 2026-11-07 07:23:36,027 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:23:36 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:50,349 DEBG 'nginx-0' stderr output:
+cvat_worker_import  | 2026-11-07 07:29:44,928 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:44,927] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:45,931 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:45,930] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:46,938 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:46,938] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:47,942 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:47,942] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:48,944 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | 2026-11-07 07:29:33,217 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:33,217] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:34,226 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:34,225] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:35,232 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:35,232] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:36,239 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:36,239] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:37,248 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:37,247] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:38,252 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:38,251] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:39,259 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:39,258] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | [2026-11-07 07:29:48,944] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:49,951 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:49,951] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_export  | 2026-11-07 07:29:40,263 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:40,262] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:41,271 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:41,270] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:42,278 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:42,277] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:43,285 DEBG 'rqworker-1' stderr output:
+cvat_server         | 2026/11/07 07:23:50 [error] 236#236: *90 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:23:50,349 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:23:50 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:07,847 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:24:07 [error] 236#236: *92 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:07,848 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:24:07 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_worker_export  | [2026-11-07 07:29:43,284] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:44,289 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:44,288] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 2026-11-07 07:24:25,598 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:24:25 [error] 236#236: *94 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_worker_export  | 2026-11-07 07:29:45,294 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:45,293] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:46,297 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:46,296] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:47,300 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:47,299] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:25,598 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:24:25 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_worker_import  | 2026-11-07 07:29:50,955 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:50,954] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:40,567 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:24:40 [error] 236#236: *96 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:40,567 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:24:40 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:57,783 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:24:57 [error] 236#236: *98 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:24:57,784 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:24:57 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:13,810 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:25:13 [error] 236#236: *100 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:13,810 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:25:13 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:30,717 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:25:30 [error] 236#236: *102 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:30,717 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:25:30 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:48,308 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:25:48 [error] 236#236: *104 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:25:48,309 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:25:48 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:01,478 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:26:01 [error] 236#236: *106 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_worker_export  | 2026-11-07 07:29:48,305 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:48,305] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:49,307 DEBG 'rqworker-1' stderr output:
+cvat_server         | 2026-11-07 07:26:01,479 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:26:01 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:18,009 DEBG 'nginx-0' stderr output:
+cvat_worker_import  | 2026-11-07 07:29:51,963 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:51,962] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:52,970 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:52,970] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_server         | 2026/11/07 07:26:18 [error] 236#236: *108 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:18,009 DEBG 'nginx-0' stdout output:
+cvat_worker_export  | [2026-11-07 07:29:49,307] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:50,311 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:50,311] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:51,317 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:51,316] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:52,322 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:52,321] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:53,327 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:53,327] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:26:18 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:34,241 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:26:34 [error] 236#236: *110 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:34,241 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:26:34 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_worker_import  | 2026-11-07 07:29:53,974 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:53,973] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:54,979 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:54,978] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:55,980 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:55,980] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:56,984 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:56,983] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:57,985 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:57,985] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:58,989 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:58,988] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:29:59,996 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:29:59,996] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:00,999 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:00,998] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:02,005 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:54,332 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:54,331] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 2026-11-07 07:26:47,503 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:26:47 [error] 236#236: *112 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:26:47,503 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:26:47 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:00,200 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:27:00 [error] 236#236: *114 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:00,200 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:27:00 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:14,026 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:27:14 [error] 236#236: *116 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:14,026 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:27:14 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:28,565 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:27:28 [error] 238#238: *118 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_worker_export  | 2026-11-07 07:29:55,338 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:55,337] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:56,343 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:56,342] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:57,347 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:57,346] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:58,354 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:58,353] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:29:59,358 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:29:59,357] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:00,362 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:00,361] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:01,370 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:01,369] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:02,378 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:02,377] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:03,380 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:03,380] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | [2026-11-07 07:30:02,004] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:03,006 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:03,006] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:04,010 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:04,008] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:05,013 DEBG 'rqworker-1' stderr output:
+cvat_server         | 2026-11-07 07:27:28,565 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:27:28 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:41,416 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:27:41 [error] 238#238: *120 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_worker_export  | 2026-11-07 07:30:04,388 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:04,387] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:05,396 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:05,395] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_server         | 2026-11-07 07:27:41,417 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:27:41 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:55,301 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:27:55 [error] 238#238: *122 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:27:55,301 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:27:55 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:09,432 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:28:09 [error] 238#238: *124 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:09,433 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:28:09 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:22,938 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:28:22 [error] 238#238: *126 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:22,938 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:28:22 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:37,523 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:28:37 [error] 238#238: *128 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:37,524 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:28:37 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:49,600 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:28:49 [error] 238#238: *130 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:28:49,601 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:28:49 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:01,841 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:29:01 [error] 238#238: *132 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:01,842 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:29:01 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:19,689 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:29:19 [error] 238#238: *134 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:19,689 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:29:19 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:34,444 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:29:34 [error] 238#238: *136 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:34,445 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:29:34 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:51,676 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:29:51 [error] 238#238: *138 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:29:51,677 DEBG 'nginx-0' stdout output:
+cvat_worker_import  | [2026-11-07 07:30:05,012] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:06,018 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:06,017] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:07,025 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:07,024] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:08,029 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:08,028] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:09,030 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:09,030] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:10,032 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:10,031] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:11,040 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:11,038] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:12,047 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:12,046] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:13,053 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:13,052] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:14,059 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:14,057] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:15,064 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:15,063] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:16,069 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:16,068] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:17,070 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:17,070] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:18,071 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:18,071] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:19,077 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:19,076] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:20,078 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:20,078] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:21,084 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:21,083] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:22,088 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:22,088] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:23,093 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:23,093] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:29:51 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:30:06,057 DEBG 'nginx-0' stderr output:
+cvat_server         | 2026/11/07 07:30:06 [error] 238#238: *140 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:30:06,057 DEBG 'nginx-0' stdout output:
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:06,402 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:06,401] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:07,407 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:07,406] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:08,415 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:08,414] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:09,424 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:09,423] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:10,431 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:10,431] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:30:06 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:30:21,257 DEBG 'nginx-0' stderr output:
+cvat_worker_export  | 2026-11-07 07:30:11,436 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:11,435] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:12,441 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:12,441] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:13,449 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:13,448] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_server         | 2026/11/07 07:30:21 [error] 238#238: *142 connect() to unix:/tmp/cvat/uvicorn.sock failed (111: Connection refused) while connecting to upstream, client: 172.18.0.5, server: _, request: "GET /api/auth/rules HTTP/1.1", upstream: "http://unix:/tmp/cvat/uvicorn.sock:/api/auth/rules", host: "cvat-server:8080"
+cvat_server         | 
+cvat_server         | 2026-11-07 07:30:21,258 DEBG 'nginx-0' stdout output:
+cvat_server         | 172.18.0.5 - - [07/Nov/2026:07:30:21 +0000] "GET /api/auth/rules HTTP/1.1" 502 150 "-" "Open Policy Agent/1.12.2 (linux, arm64)"
+cvat_server         | 
+cvat_worker_export  | 2026-11-07 07:30:14,453 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:14,452] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:15,457 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 2026-11-07 07:30:24,095 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:24,095] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:25,102 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:25,101] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:26,105 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:26,104] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | [2026-11-07 07:30:15,456] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:16,460 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:16,459] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:17,466 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:17,465] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:18,471 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:18,471] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:19,476 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:27,108 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:27,108] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_export  | [2026-11-07 07:30:19,475] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:20,484 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:20,483] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:21,488 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:21,487] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:22,496 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:22,495] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:23,502 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:23,502] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:24,509 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:24,508] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:25,515 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:25,514] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:26,522 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:26,521] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:27,529 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:27,529] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_export  | 2026-11-07 07:30:28,532 DEBG 'rqworker-1' stderr output:
+cvat_worker_export  | [2026-11-07 07:30:28,532] DEBUG rq.scheduler: Scheduler sending heartbeat to export
+cvat_worker_export  | 
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:28,115 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:28,114] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
+cvat_worker_import  | 2026-11-07 07:30:29,118 DEBG 'rqworker-1' stderr output:
+cvat_worker_import  | [2026-11-07 07:30:29,118] DEBUG rq.scheduler: Scheduler sending heartbeat to import
+cvat_worker_import  | 
