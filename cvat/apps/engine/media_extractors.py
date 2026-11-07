@@ -529,6 +529,9 @@ class DicomReader(ImageListReader):
             pixel_array = ds.pixel_array
             photo = getattr(ds, "PhotometricInterpretation", "")
             num_frames = getattr(ds, "NumberOfFrames", None)
+            file_meta = getattr(ds, "file_meta", None)
+            tsuid = getattr(file_meta, "TransferSyntaxUID", None)
+            is_compressed = bool(getattr(tsuid, "is_compressed", False)) if tsuid is not None else False
 
             is_multiframe = False
             if num_frames is not None and int(num_frames) > 1:
@@ -553,7 +556,9 @@ class DicomReader(ImageListReader):
                     break
 
                 cur_frame = frame
-                if "YBR" in photo:
+                # 若為未壓縮語法且色彩空間包含 YBR，需轉為 RGB；
+                # 若為壓縮格式（如 JPEG Baseline），解碼器輸出時已自動轉為 RGB，無需重複轉換
+                if not is_compressed and "YBR" in photo:
                     try:
                         cur_frame = convert_color_space(cur_frame, photo, "RGB")
                     except Exception:
