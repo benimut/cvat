@@ -1,0 +1,12 @@
+# 基於官方已編譯好的現成映像檔，避免從零編譯 FFmpeg 與 C++ 函式庫
+FROM cvat/server:dev
+
+USER root
+
+# 安裝 DICOM 解析套件 (pydicom)
+RUN pip install --no-cache-dir pydicom~=3.0
+
+# 複製修改後的 CVAT 後端程式碼至容器內
+COPY cvat /home/django/cvat
+
+USER django
