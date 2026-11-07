@@ -506,7 +506,8 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
        形成實心連通區域。
     3. 提取最大輪廓（面積需大於影像面積 10%），繪製乾淨的實心遮罩。
     4. 對實心遮罩執行 Canny 邊緣偵測與 HoughLinesP 直線檢測，識別外邊界的左斜邊與右斜邊射線。
-    5. 選取長度最長之左斜邊與右斜邊求解直線交點 (cx, cy) 作為 Apex。
+    5. 選取長度最長之左斜邊與右斜邊求解直線交點 (cx, cy) 作為 Apex；
+       若僅偵測到單側射線，利用影像水平中線對稱推導 Apex 與對稱射線角度。
     6. 執行中心對稱與頂部合理性校驗（0.35w <= cx <= 0.65w 且 0 <= cy <= 0.40h）。
     7. 計算輪廓至 Apex 距離（99.5 百分位）作為最大外半徑 r_max，繪製保留尖端至圓心的扇形 Mask。
     8. 若 expand_px > 0 則透過形態學膨脹向外擴張指定像素大小容錯。
@@ -555,7 +556,7 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
 
     # 僅對乾淨實心 mask 執行 Canny 與 HoughLinesP，避免心臟內部組織回波干擾
     edges = cv2.Canny(solid_mask, 50, 150)
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=60, maxLineGap=10)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=35, maxLineGap=10)
     if lines is None:
         return None
 
@@ -567,57 +568,112 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
         dx = x2 - x1
         dy = y2 - y1
         length = float(np.hypot(dx, dy))
-        if length < 60:
+        if length < 35:
             continue
         angle = float(np.degrees(np.arctan2(dy, dx))) % 180.0
-        # 篩選左斜邊（angle 約 120°~150°）與右斜邊（angle 約 30°~60°）
-        if 120.0 <= angle <= 150.0:
+        mid_x = (x1 + x2) / 2.0
+        # 篩選左斜邊（angle 約 120°~150°，且位於影像中線偏左）
+        if 120.0 <= angle <= 150.0 and mid_x <= 0.55 * w:
             left_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
-        elif 30.0 <= angle <= 60.0:
+        # 篩選右斜邊（angle 約 30°~60°，且位於影像中線偏右）
+        elif 30.0 <= angle <= 60.0 and mid_x >= 0.45 * w:
             right_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
 
-    # 若未同時成功偵測到左右外射線，代表非扇形超音波
-    if not left_lines or not right_lines:
+    # 若未偵測到任何一側射線，代表非扇形超音波
+    if not left_lines and not right_lines:
         return None
 
-    # 選取長度最長的外射線求解交點作為頂點圓心（Apex）
-    left_lines.sort(key=lambda x: x[0], reverse=True)
-    right_lines.sort(key=lambda x: x[0], reverse=True)
+    # 射線交點與角度計算
+    if left_lines and right_lines:
+        # a. 雙側射線皆存在：選取長度最長的外射線求解直線交點作為頂點圓心（Apex）
+        left_lines.sort(key=lambda x: x[0], reverse=True)
+        right_lines.sort(key=lambda x: x[0], reverse=True)
 
-    _, (lx1, ly1, lx2, ly2) = left_lines[0]
-    _, (rx1, ry1, rx2, ry2) = right_lines[0]
+        _, (lx1, ly1, lx2, ly2) = left_lines[0]
+        _, (rx1, ry1, rx2, ry2) = right_lines[0]
 
-    # 直線方程式 A*x + B*y = C 計算頂點圓心（Apex）交點
-    A1 = ly2 - ly1
-    B1 = lx1 - lx2
-    C1 = A1 * lx1 + B1 * ly1
+        # 直線方程式 A*x + B*y = C 計算頂點圓心（Apex）交點
+        A1 = ly2 - ly1
+        B1 = lx1 - lx2
+        C1 = A1 * lx1 + B1 * ly1
 
-    A2 = ry2 - ry1
-    B2 = rx1 - rx2
-    C2 = A2 * rx1 + B2 * ry1
+        A2 = ry2 - ry1
+        B2 = rx1 - rx2
+        C2 = A2 * rx1 + B2 * ry1
 
-    det = A1 * B2 - A2 * B1
-    if abs(det) < 1e-5:
-        return None
+        det = A1 * B2 - A2 * B1
+        if abs(det) < 1e-5:
+            return None
 
-    cx = (C1 * B2 - C2 * B1) / det
-    cy = (A1 * C2 - A2 * C1) / det
+        cx = (C1 * B2 - C2 * B1) / det
+        cy = (A1 * C2 - A2 * C1) / det
 
-    # 中心對稱校驗：頂點 cx 需位於水平中央區域且 cy 位於頂部
+        # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度
+        l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+
+        ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
+        ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
+    elif right_lines:
+        # b. 僅偵測到右側射線：以影像水平中線 cx = w / 2 與射線交點推導 cy，並鏡像角度
+        right_lines.sort(key=lambda x: x[0], reverse=True)
+        _, (rx1, ry1, rx2, ry2) = right_lines[0]
+
+        A2 = ry2 - ry1
+        B2 = rx1 - rx2
+        C2 = A2 * rx1 + B2 * ry1
+
+        cx = w / 2.0
+        if abs(B2) < 1e-5:
+            return None
+        cy = (C2 - A2 * cx) / B2
+
+        r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
+        ang_l = (180.0 - ang_r) % 360.0
+    else:
+        # b. 僅偵測到左側射線：以影像水平中線 cx = w / 2 與射線交點推導 cy，並鏡像角度
+        left_lines.sort(key=lambda x: x[0], reverse=True)
+        _, (lx1, ly1, lx2, ly2) = left_lines[0]
+
+        A1 = ly2 - ly1
+        B1 = lx1 - lx2
+        C1 = A1 * lx1 + B1 * ly1
+
+        cx = w / 2.0
+        if abs(B1) < 1e-5:
+            return None
+        cy = (C1 - A1 * cx) / B1
+
+        l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
+        ang_r = (180.0 - ang_l) % 360.0
+
+    # c. 中心對稱校驗：頂點 cx 需位於水平中央區域且 cy 位於頂部
     if not (0.35 * w <= cx <= 0.65 * w and 0.0 <= cy <= 0.40 * h):
         return None
 
-    # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度
-    l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
-    r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
-
-    ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
-    ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
-
-    # 由實心輪廓點至 Apex 的最大距離（99.5 百分位）確定最大外半徑
+    # d. 計算最大外半徑：結合實心輪廓點與射線最大深度確定 r_max
     cnt_pts = max_cnt.reshape(-1, 2)
     dists = np.hypot(cnt_pts[:, 0] - cx, cnt_pts[:, 1] - cy)
-    r_max = int(np.ceil(np.percentile(dists, 99.5)))
+    cnt_r_max = float(np.percentile(dists, 99.5))
+
+    # 計算所有候選射線端點到 Apex 的最大距離作為射線深度參考
+    ray_pts = []
+    for _, pts in left_lines + right_lines:
+        ray_pts.append((pts[0], pts[1]))
+        ray_pts.append((pts[2], pts[3]))
+    if ray_pts:
+        ray_arr = np.array(ray_pts)
+        max_ray_dist = float(np.max(np.hypot(ray_arr[:, 0] - cx, ray_arr[:, 1] - cy)))
+    else:
+        max_ray_dist = cnt_r_max
+
+    # 若輪廓最大距離被底部心電圖 (ECG) 雜訊拉長，則以射線最大深度為基準限制 r_max
+    if max_ray_dist > 50 and cnt_r_max > max_ray_dist * 1.05:
+        r_max = int(np.ceil(max_ray_dist))
+    else:
+        r_max = int(np.ceil(cnt_r_max))
 
     start_angle = min(ang_l, ang_r)
     end_angle = max(ang_l, ang_r)
@@ -683,13 +739,40 @@ class DicomReader(ImageListReader):
 
             if not is_multiframe:
                 frames_iter = [pixel_array]
+                mip_frame = pixel_array
             else:
                 frames_iter = pixel_array
+                mip_frame = np.max(pixel_array, axis=0)
+
+            # 處理 MIP 影格色彩空間轉換與 uint8 正規化，計算全片統一扇形遮罩
+            if not is_compressed and "YBR" in photo:
+                try:
+                    mip_frame = convert_color_space(mip_frame, photo, "RGB")
+                except Exception:
+                    pass
+
+            if mip_frame.dtype == np.uint8:
+                mip_uint8 = mip_frame
+            elif mip_frame.dtype == np.uint16:
+                min_val = mip_frame.min()
+                max_val = mip_frame.max()
+                if max_val > min_val:
+                    mip_uint8 = ((mip_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                else:
+                    mip_uint8 = mip_frame.astype(np.uint8)
+            else:
+                min_val = mip_frame.min()
+                max_val = mip_frame.max()
+                if max_val > min_val:
+                    mip_uint8 = ((mip_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                else:
+                    mip_uint8 = np.zeros_like(mip_frame, dtype=np.uint8)
+
+            sector_mask = _detect_ultrasound_sector_mask(mip_uint8)
 
             total_frames = len(frames_iter)
             pad_len = max(len(str(total_frames)), 4)
             stop_idx = stop if stop is not None else total_frames - 1
-            sector_mask = None
 
             for idx, frame in enumerate(frames_iter):
                 # 若已超過 stop 影格則提早結束解碼（遵循與 PdfReader 相同的設計模式）
@@ -723,10 +806,6 @@ class DicomReader(ImageListReader):
                     else:
                         norm = np.zeros_like(cur_frame, dtype=np.uint8)
                     frame_arr = norm
-
-                # 於第 0 幀偵測超音波扇形遮罩
-                if idx == 0:
-                    sector_mask = _detect_ultrasound_sector_mask(frame_arr)
 
                 # 若偵測到扇形遮罩，套用遮罩進行扇形外圍去黑處理
                 if sector_mask is not None:
