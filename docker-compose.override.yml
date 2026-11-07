@@ -1,0 +1,15 @@
+# 覆寫預設 Docker Compose 設定，使用客製化輕量 DICOM 映像檔
+services:
+  cvat_server:
+    build:
+      context: .
+      dockerfile: Dockerfile.dicom
+    image: cvat/server:dicom
+
+  # 背景匯入與解碼 DICOM 的 Worker 使用相同映像檔
+  cvat_worker_import:
+    image: cvat/server:dicom
+
+  # 背景匯出 Worker 使用相同映像檔
+  cvat_worker_export:
+    image: cvat/server:dicom

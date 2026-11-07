@@ -496,10 +496,206 @@ class PdfReader(ImageListReader):
         )
 
 
+def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> np.ndarray | None:
+    """
+    自動偵測超音波扇形區域並生成去黑遮罩。
+
+    演算法流程：
+    1. 將輸入影格轉為灰階，若尺寸過小（< 80x80）則直接返回 None。
+    2. 二值化並透過大結構元素閉運算（MORPH_CLOSE）填平心臟內部所有組織回波與心室暗腔，
+       形成實心連通區域。
+    3. 提取最大輪廓（面積需大於影像面積 10%），繪製乾淨的實心遮罩。
+    4. 對實心遮罩執行 Canny 邊緣偵測與 HoughLinesP 直線檢測，識別外邊界的左斜邊與右斜邊射線。
+    5. 選取長度最長之左斜邊與右斜邊求解直線交點 (cx, cy) 作為 Apex；
+       若僅偵測到單側射線，利用影像水平中線對稱推導 Apex 與對稱射線角度。
+    6. 執行中心對稱與頂部合理性校驗（0.35w <= cx <= 0.65w 且 0 <= cy <= 0.40h）。
+    7. 計算輪廓至 Apex 距離（99.5 百分位）作為最大外半徑 r_max，繪製保留尖端至圓心的扇形 Mask。
+    8. 若 expand_px > 0 則透過形態學膨脹向外擴張指定像素大小容錯。
+
+    參數：
+        frame_np (np.ndarray): 輸入影格（RGB 或灰階 uint8 影像矩陣）。
+        expand_px (int): 遮罩整體向外擴張之像素大小（預設 5px）。
+
+    返回：
+        np.ndarray | None: 二值遮罩（uint8，扇形內部為 255，扇形外為 0），若非扇形則為 None。
+    """
+    import cv2
+
+    if frame_np is None or frame_np.size == 0:
+        return None
+
+    if frame_np.ndim == 3:
+        gray = cv2.cvtColor(frame_np, cv2.COLOR_RGB2GRAY)
+    elif frame_np.ndim == 2:
+        gray = frame_np
+    else:
+        return None
+
+    h, w = gray.shape[:2]
+    if h < 80 or w < 80:
+        return None
+
+    # 二值化
+    _, thresh = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
+    # 閉運算填平心臟內部所有組織回波與心室暗腔
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (35, 35))
+    closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    # 找出最大連通區域（扇形本體，面積需 > 10% 影像面積）
+    contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return None
+
+    max_cnt = max(contours, key=cv2.contourArea)
+    area = float(cv2.contourArea(max_cnt))
+    if area < 0.10 * (h * w):
+        return None
+
+    solid_mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.drawContours(solid_mask, [max_cnt], -1, 255, -1)
+
+    # 僅對乾淨實心 mask 執行 Canny 與 HoughLinesP，避免心臟內部組織回波干擾
+    edges = cv2.Canny(solid_mask, 50, 150)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=35, maxLineGap=10)
+    if lines is None:
+        return None
+
+    left_lines: list[tuple[float, tuple[int, int, int, int]]] = []
+    right_lines: list[tuple[float, tuple[int, int, int, int]]] = []
+
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        dx = x2 - x1
+        dy = y2 - y1
+        length = float(np.hypot(dx, dy))
+        if length < 35:
+            continue
+        angle = float(np.degrees(np.arctan2(dy, dx))) % 180.0
+        mid_x = (x1 + x2) / 2.0
+        # 篩選左斜邊（angle 約 120°~150°，且位於影像中線偏左）
+        if 120.0 <= angle <= 150.0 and mid_x <= 0.55 * w:
+            left_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
+        # 篩選右斜邊（angle 約 30°~60°，且位於影像中線偏右）
+        elif 30.0 <= angle <= 60.0 and mid_x >= 0.45 * w:
+            right_lines.append((length, (int(x1), int(y1), int(x2), int(y2))))
+
+    # 若未偵測到任何一側射線，代表非扇形超音波
+    if not left_lines and not right_lines:
+        return None
+
+    # 射線交點與角度計算
+    if left_lines and right_lines:
+        # a. 雙側射線皆存在：選取長度最長的外射線求解直線交點作為頂點圓心（Apex）
+        left_lines.sort(key=lambda x: x[0], reverse=True)
+        right_lines.sort(key=lambda x: x[0], reverse=True)
+
+        _, (lx1, ly1, lx2, ly2) = left_lines[0]
+        _, (rx1, ry1, rx2, ry2) = right_lines[0]
+
+        # 直線方程式 A*x + B*y = C 計算頂點圓心（Apex）交點
+        A1 = ly2 - ly1
+        B1 = lx1 - lx2
+        C1 = A1 * lx1 + B1 * ly1
+
+        A2 = ry2 - ry1
+        B2 = rx1 - rx2
+        C2 = A2 * rx1 + B2 * ry1
+
+        det = A1 * B2 - A2 * B1
+        if abs(det) < 1e-5:
+            return None
+
+        cx = (C1 * B2 - C2 * B1) / det
+        cy = (A1 * C2 - A2 * C1) / det
+
+        # 找出離頂點 (cx, cy) 最遠的端點以計算射線角度
+        l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+
+        ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
+        ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
+    elif right_lines:
+        # b. 僅偵測到右側射線：以影像水平中線 cx = w / 2 與射線交點推導 cy，並鏡像角度
+        right_lines.sort(key=lambda x: x[0], reverse=True)
+        _, (rx1, ry1, rx2, ry2) = right_lines[0]
+
+        A2 = ry2 - ry1
+        B2 = rx1 - rx2
+        C2 = A2 * rx1 + B2 * ry1
+
+        cx = w / 2.0
+        if abs(B2) < 1e-5:
+            return None
+        cy = (C2 - A2 * cx) / B2
+
+        r_furthest = max([(rx1, ry1), (rx2, ry2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        ang_r = float(np.degrees(np.arctan2(r_furthest[1] - cy, r_furthest[0] - cx))) % 360.0
+        ang_l = (180.0 - ang_r) % 360.0
+    else:
+        # b. 僅偵測到左側射線：以影像水平中線 cx = w / 2 與射線交點推導 cy，並鏡像角度
+        left_lines.sort(key=lambda x: x[0], reverse=True)
+        _, (lx1, ly1, lx2, ly2) = left_lines[0]
+
+        A1 = ly2 - ly1
+        B1 = lx1 - lx2
+        C1 = A1 * lx1 + B1 * ly1
+
+        cx = w / 2.0
+        if abs(B1) < 1e-5:
+            return None
+        cy = (C1 - A1 * cx) / B1
+
+        l_furthest = max([(lx1, ly1), (lx2, ly2)], key=lambda p: np.hypot(p[0] - cx, p[1] - cy))
+        ang_l = float(np.degrees(np.arctan2(l_furthest[1] - cy, l_furthest[0] - cx))) % 360.0
+        ang_r = (180.0 - ang_l) % 360.0
+
+    # c. 中心對稱校驗：頂點 cx 需位於水平中央區域且 cy 位於頂部
+    if not (0.35 * w <= cx <= 0.65 * w and 0.0 <= cy <= 0.40 * h):
+        return None
+
+    # d. 計算最大外半徑：結合實心輪廓點與射線最大深度確定 r_max
+    cnt_pts = max_cnt.reshape(-1, 2)
+    dists = np.hypot(cnt_pts[:, 0] - cx, cnt_pts[:, 1] - cy)
+    cnt_r_max = float(np.percentile(dists, 99.5))
+
+    # 計算所有候選射線端點到 Apex 的最大距離作為射線深度參考
+    ray_pts = []
+    for _, pts in left_lines + right_lines:
+        ray_pts.append((pts[0], pts[1]))
+        ray_pts.append((pts[2], pts[3]))
+    if ray_pts:
+        ray_arr = np.array(ray_pts)
+        max_ray_dist = float(np.max(np.hypot(ray_arr[:, 0] - cx, ray_arr[:, 1] - cy)))
+    else:
+        max_ray_dist = cnt_r_max
+
+    # 若輪廓最大距離被底部心電圖 (ECG) 雜訊拉長，則以射線最大深度為基準限制 r_max
+    if max_ray_dist > 50 and cnt_r_max > max_ray_dist * 1.05:
+        r_max = int(np.ceil(max_ray_dist))
+    else:
+        r_max = int(np.ceil(cnt_r_max))
+
+    start_angle = min(ang_l, ang_r)
+    end_angle = max(ang_l, ang_r)
+
+    # 繪製扇形 Mask（尖端保留至圓心，即 r_min = 0）
+    mask = np.zeros((h, w), dtype=np.uint8)
+    center = (int(round(cx)), int(round(cy)))
+    cv2.ellipse(mask, center, (r_max, r_max), 0, start_angle, end_angle, 255, -1)
+
+    # 使用形態學膨脹向外擴張 expand_px 容錯
+    if expand_px > 0:
+        ksize = expand_px * 2 + 1
+        kernel_expand = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
+        mask = cv2.dilate(mask, kernel_expand)
+
+    return mask
+
+
 class DicomReader(ImageListReader):
     """
     DICOM 檔案讀取器，支援多影格（Multi-frame）與單張 DICOM 影像解析，
-    自動處理色彩空間轉換（YBR 轉 RGB）與數值正規化，並輸出序列影格供 CVAT 標註。
+    自動處理色彩空間轉換（YBR 轉 RGB）、超音波扇形去黑遮罩與數值正規化，並輸出序列影格供 CVAT 標註。
     """
     def __init__(
         self,
@@ -515,7 +711,10 @@ class DicomReader(ImageListReader):
         _basename = os.path.splitext(os.path.basename(self._dicom_source))[0]
 
         from pydicom import dcmread
-        from pydicom.pixel_data_handlers.util import convert_color_space
+        try:
+            from pydicom.pixels import convert_color_space
+        except ImportError:
+            from pydicom.pixel_data_handlers.util import convert_color_space
 
         self._tmp_dir = extract_dir if extract_dir else os.path.dirname(self._dicom_source)
         os.makedirs(self._tmp_dir, exist_ok=True)
@@ -526,6 +725,9 @@ class DicomReader(ImageListReader):
             pixel_array = ds.pixel_array
             photo = getattr(ds, "PhotometricInterpretation", "")
             num_frames = getattr(ds, "NumberOfFrames", None)
+            file_meta = getattr(ds, "file_meta", None)
+            tsuid = getattr(file_meta, "TransferSyntaxUID", None)
+            is_compressed = bool(getattr(tsuid, "is_compressed", False)) if tsuid is not None else False
 
             is_multiframe = False
             if num_frames is not None and int(num_frames) > 1:
@@ -537,34 +739,65 @@ class DicomReader(ImageListReader):
 
             if not is_multiframe:
                 frames_iter = [pixel_array]
+                mip_frame = pixel_array
             else:
                 frames_iter = pixel_array
+                mip_frame = np.max(pixel_array, axis=0)
+
+            # 處理 MIP 影格色彩空間轉換與 uint8 正規化，計算全片統一扇形遮罩
+            if not is_compressed and "YBR" in photo:
+                try:
+                    mip_frame = convert_color_space(mip_frame, photo, "RGB")
+                except Exception:
+                    pass
+
+            if mip_frame.dtype == np.uint8:
+                mip_uint8 = mip_frame
+            elif mip_frame.dtype == np.uint16:
+                min_val = mip_frame.min()
+                max_val = mip_frame.max()
+                if max_val > min_val:
+                    mip_uint8 = ((mip_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                else:
+                    mip_uint8 = mip_frame.astype(np.uint8)
+            else:
+                min_val = mip_frame.min()
+                max_val = mip_frame.max()
+                if max_val > min_val:
+                    mip_uint8 = ((mip_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
+                else:
+                    mip_uint8 = np.zeros_like(mip_frame, dtype=np.uint8)
+
+            sector_mask = _detect_ultrasound_sector_mask(mip_uint8)
 
             total_frames = len(frames_iter)
             pad_len = max(len(str(total_frames)), 4)
             stop_idx = stop if stop is not None else total_frames - 1
 
             for idx, frame in enumerate(frames_iter):
-                if idx < start or idx > stop_idx or (idx - start) % step != 0:
-                    continue
+                # 若已超過 stop 影格則提早結束解碼（遵循與 PdfReader 相同的設計模式）
+                if stop is not None and idx > stop_idx:
+                    break
 
                 cur_frame = frame
-                if "YBR" in photo:
+                # 若為未壓縮語法且色彩空間包含 YBR，需轉為 RGB；
+                # 若為壓縮格式（如 JPEG Baseline），解碼器輸出時已自動轉為 RGB，無需重複轉換
+                if not is_compressed and "YBR" in photo:
                     try:
                         cur_frame = convert_color_space(cur_frame, photo, "RGB")
                     except Exception:
                         pass
 
                 if cur_frame.dtype == np.uint8:
-                    img = Image.fromarray(cur_frame)
+                    frame_arr = cur_frame
                 elif cur_frame.dtype == np.uint16:
                     min_val = cur_frame.min()
                     max_val = cur_frame.max()
                     if max_val > min_val:
                         norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
-                        img = Image.fromarray(norm)
+                        frame_arr = norm
                     else:
-                        img = Image.fromarray(cur_frame.astype(np.uint8))
+                        frame_arr = cur_frame.astype(np.uint8)
                 else:
                     min_val = cur_frame.min()
                     max_val = cur_frame.max()
@@ -572,24 +805,25 @@ class DicomReader(ImageListReader):
                         norm = ((cur_frame.astype(np.float32) - min_val) / (max_val - min_val) * 255).astype(np.uint8)
                     else:
                         norm = np.zeros_like(cur_frame, dtype=np.uint8)
-                    img = Image.fromarray(norm)
+                    frame_arr = norm
+
+                # 若偵測到扇形遮罩，套用遮罩進行扇形外圍去黑處理
+                if sector_mask is not None:
+                    import cv2
+                    frame_arr = cv2.bitwise_and(frame_arr, frame_arr, mask=sector_mask)
+
+                img = Image.fromarray(frame_arr)
 
                 frame_name = "{}_{}.png".format(_basename, str(idx).zfill(pad_len))
                 frame_path = os.path.join(self._tmp_dir, frame_name)
                 img.save(frame_path, format="PNG")
                 extracted_paths.append(Path(frame_path))
 
-        if not extract_dir and os.path.exists(self._dicom_source):
-            try:
-                os.remove(self._dicom_source)
-            except OSError:
-                pass
-
         super().__init__(
             source_paths=extracted_paths,
-            step=1,
-            start=0,
-            stop=None,
+            step=step,
+            start=start,
+            stop=stop,
             dimension=dimension,
             sorting_method=sorting_method,
         )
@@ -1662,7 +1896,7 @@ MEDIA_TYPES = {
     "dicom": {
         "has_mime_type": _is_dicom,
         "extractor": DicomReader,
-        "mode": TaskMode.INTERPOLATION,
+        "mode": TaskMode.ANNOTATION,
         "unique": True,
     },
 

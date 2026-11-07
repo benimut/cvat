@@ -1,0 +1,18 @@
+# 基於官方已編譯好的現成映像檔，避免從零編譯 FFmpeg 與 C++ 函式庫
+FROM cvat/server:dev
+
+USER root
+
+# 將預先準備好的純 Python pydicom wheel 解壓至 CVAT 虛擬環境 site-packages
+# 採用 Python 內建 zipfile 模組解壓，完全不依賴 apt-get 或 pip，避免網路失敗與權限問題
+COPY pydicom-3.0.2-py3-none-any.whl /tmp/
+RUN python3 -m zipfile -e /tmp/pydicom-3.0.2-py3-none-any.whl /opt/venv/lib/python3.12/site-packages/ && \
+    rm /tmp/pydicom-3.0.2-py3-none-any.whl
+
+# 複製修改後的 CVAT 後端程式碼至正確的系統路徑 (/opt/cvat/cvat)
+COPY cvat /opt/cvat/cvat
+
+# 確保檔案所有權屬於 django 使用者 (UID 1000)
+RUN chown -R 1000:1000 /opt/cvat/cvat /opt/venv/lib/python3.12/site-packages/pydicom*
+
+USER 1000:1000
