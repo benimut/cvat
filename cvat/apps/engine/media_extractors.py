@@ -515,7 +515,10 @@ class DicomReader(ImageListReader):
         _basename = os.path.splitext(os.path.basename(self._dicom_source))[0]
 
         from pydicom import dcmread
-        from pydicom.pixel_data_handlers.util import convert_color_space
+        try:
+            from pydicom.pixels import convert_color_space
+        except ImportError:
+            from pydicom.pixel_data_handlers.util import convert_color_space
 
         self._tmp_dir = extract_dir if extract_dir else os.path.dirname(self._dicom_source)
         os.makedirs(self._tmp_dir, exist_ok=True)
@@ -545,8 +548,9 @@ class DicomReader(ImageListReader):
             stop_idx = stop if stop is not None else total_frames - 1
 
             for idx, frame in enumerate(frames_iter):
-                if idx < start or idx > stop_idx or (idx - start) % step != 0:
-                    continue
+                # 若已超過 stop 影格則提早結束解碼（遵循與 PdfReader 相同的設計模式）
+                if stop is not None and idx > stop_idx:
+                    break
 
                 cur_frame = frame
                 if "YBR" in photo:
@@ -587,9 +591,9 @@ class DicomReader(ImageListReader):
 
         super().__init__(
             source_paths=extracted_paths,
-            step=1,
-            start=0,
-            stop=None,
+            step=step,
+            start=start,
+            stop=stop,
             dimension=dimension,
             sorting_method=sorting_method,
         )
@@ -1662,7 +1666,7 @@ MEDIA_TYPES = {
     "dicom": {
         "has_mime_type": _is_dicom,
         "extractor": DicomReader,
-        "mode": TaskMode.INTERPOLATION,
+        "mode": TaskMode.ANNOTATION,
         "unique": True,
     },
 
