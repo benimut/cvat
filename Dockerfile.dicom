@@ -3,14 +3,11 @@ FROM cvat/server:dev
 
 USER root
 
-# 官方映像檔在最終階段為了安全性卸載了 pip (CVE-2018-20225)
-# 此處透過 apt 臨時安裝 python3-pip，完成安裝 pydicom 後立即清理快取與移除 pip
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3-pip && \
-    python3 -m pip install --no-cache-dir --break-system-packages pydicom~=3.0 && \
-    apt-get purge -y python3-pip && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+# 將預先準備好的純 Python pydicom wheel 解壓至 CVAT 虛擬環境 site-packages
+# 採用 Python 內建 zipfile 模組解壓，完全不依賴 apt-get 或 pip，避免網路失敗與權限問題
+COPY pydicom-3.0.2-py3-none-any.whl /tmp/
+RUN python3 -m zipfile -e /tmp/pydicom-3.0.2-py3-none-any.whl /opt/venv/lib/python3.12/site-packages/ && \
+    rm /tmp/pydicom-3.0.2-py3-none-any.whl
 
 # 複製修改後的 CVAT 後端程式碼至容器內
 COPY cvat /home/django/cvat
