@@ -9,7 +9,10 @@ COPY pydicom-3.0.2-py3-none-any.whl /tmp/
 RUN python3 -m zipfile -e /tmp/pydicom-3.0.2-py3-none-any.whl /opt/venv/lib/python3.12/site-packages/ && \
     rm /tmp/pydicom-3.0.2-py3-none-any.whl
 
-# 複製修改後的 CVAT 後端程式碼至容器內
-COPY cvat /home/django/cvat
+# 複製修改後的 CVAT 後端程式碼至正確的系統路徑 (/opt/cvat/cvat)
+COPY cvat /opt/cvat/cvat
 
-USER django
+# 確保檔案所有權屬於 django 使用者 (UID 1000)
+RUN chown -R 1000:1000 /opt/cvat/cvat /opt/venv/lib/python3.12/site-packages/pydicom*
+
+USER 1000:1000

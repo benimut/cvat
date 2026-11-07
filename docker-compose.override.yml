@@ -9,11 +9,7 @@ services:
   # 背景匯入與解碼 DICOM 的 Worker 使用相同映像檔
   cvat_worker_import:
     image: cvat/server:dicom
-    depends_on:
-      - cvat_server
 
   # 背景匯出 Worker 使用相同映像檔
   cvat_worker_export:
     image: cvat/server:dicom
-    depends_on:
-      - cvat_server

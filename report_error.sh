@@ -12,8 +12,8 @@ LOG_FILE="error.log"
 
 echo "[INFO] 正在收集 CVAT 服務與 Worker 的最新錯誤日誌..."
 
-# 抓取最近 300 行日誌，涵蓋伺服器與背景解碼/匯入工作者
-docker compose logs --tail=300 cvat_server cvat_worker_import cvat_worker_export > "$LOG_FILE" 2>&1
+# 抓取最近 800 行日誌，涵蓋伺服器、背景工作者、OPA 與資料庫
+docker compose logs --tail=800 cvat_server cvat_worker_import cvat_opa cvat_db > "$LOG_FILE" 2>&1
 
 echo "[INFO] 日誌收集完成，大小: $(wc -c < "$LOG_FILE") 位元組"
 echo "[INFO] 正在透過 Git 提交並推送到 GitHub..."
