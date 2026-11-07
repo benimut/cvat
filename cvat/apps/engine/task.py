@@ -261,7 +261,7 @@ def _create_segments_and_jobs(
     db_task.save()
 
 
-def _count_files(data: dict[str, Any]) -> dict[str, list[str]]:
+def _count_files(data: dict[str, Any], upload_dir: str | Path | None = None) -> dict[str, list[str]]:
     share_root = settings.SHARE_ROOT
     server_files = [f.rstrip("/") for f in data["server_files"]]
 
@@ -295,8 +295,12 @@ def _count_files(data: dict[str, Any]) -> dict[str, list[str]]:
 
     counter = {media_type: [] for media_type in MEDIA_TYPES.keys()}
 
+    client_or_remote = data["remote_files"] or data["client_files"]
     count_files(
-        file_mapping={f: f for f in data["remote_files"] or data["client_files"]},
+        file_mapping={
+            f: join_untrusted_path(upload_dir, f) if upload_dir else f
+            for f in client_or_remote
+        },
         counter=counter,
     )
 
@@ -1208,7 +1212,7 @@ def _filter_cloud_storage_files(
 def _detect_media_type_and_dimension(
     extractor: IMediaReader, *, source_dir: Path, db_data: models.Data
 ) -> tuple[models.MediaType, models.DimensionType]:
-    if isinstance(extractor, MEDIA_TYPES["video"]["extractor"]):
+    if isinstance(extractor, (MEDIA_TYPES["video"]["extractor"], MEDIA_TYPES["dicom"]["extractor"])):
         detected_media_type = models.MediaType.IMAGE
         detected_dimension = models.DimensionType.DIM_2D
     elif isinstance(extractor, MEDIA_TYPES["audio"]["extractor"]):
@@ -1677,7 +1681,7 @@ def initialize_task(
         )
 
     # count and validate uploaded files
-    media = _count_files(data)
+    media = _count_files(data, upload_dir=upload_dir)
     media, detected_mode = _validate_data(media, manifest_files=manifest_files)
     is_media_sorted = False
 
