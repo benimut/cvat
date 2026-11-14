@@ -509,7 +509,9 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     5. 選取長度最長之左斜邊與右斜邊求解直線交點 (cx, cy) 作為 Apex；
        若僅偵測到單側射線，利用影像水平中線對稱推導 Apex 與對稱射線角度。
     6. 執行中心對稱與頂部合理性校驗（0.35w <= cx <= 0.65w 且 0 <= cy <= 0.40h）。
-    7. 計算輪廓至 Apex 距離（99.5 百分位）作為最大外半徑 r_max，繪製保留尖端至圓心的扇形 Mask。
+    7. 對 RGB 影像過濾高飽和度彩色雜訊（如底部 ECG 波形）以取得純灰階 ECHO 實心前景，
+       與射線夾角錐形區域取交集後計算凸包頂點至 Apex 的最大距離作為 r_max，
+       繪製保留尖端至圓心的扇形 Mask。
     8. 若 expand_px > 0 則透過形態學膨脹向外擴張指定像素大小容錯。
 
     參數：
@@ -653,34 +655,50 @@ def _detect_ultrasound_sector_mask(frame_np: np.ndarray, expand_px: int = 5) -> 
     if not (0.35 * w <= cx <= 0.65 * w and 0.0 <= cy <= 0.40 * h):
         return None
 
-    # d. 計算最大外半徑：結合實心輪廓點與射線最大深度確定 r_max
-    cnt_pts = max_cnt.reshape(-1, 2)
-    dists = np.hypot(cnt_pts[:, 0] - cx, cnt_pts[:, 1] - cy)
-    cnt_r_max = float(np.percentile(dists, 99.5))
-
-    # 計算所有候選射線端點到 Apex 的最大距離作為射線深度參考
-    ray_pts = []
-    for _, pts in left_lines + right_lines:
-        ray_pts.append((pts[0], pts[1]))
-        ray_pts.append((pts[2], pts[3]))
-    if ray_pts:
-        ray_arr = np.array(ray_pts)
-        max_ray_dist = float(np.max(np.hypot(ray_arr[:, 0] - cx, ray_arr[:, 1] - cy)))
+    # d. 方法 B + HSV 低飽和度過濾計算最大外半徑 r_max
+    # 建立去彩色 ECG 的灰階 ECHO 前景（RGB 影像排除高飽和度彩色雜訊）
+    if frame_np.ndim == 3:
+        hsv = cv2.cvtColor(frame_np, cv2.COLOR_RGB2HSV)
+        s_chan = hsv[:, :, 1]
+        echo_fg = ((gray > 10) & (s_chan <= 40)).astype(np.uint8) * 255
     else:
-        max_ray_dist = cnt_r_max
+        echo_fg = thresh
 
-    # 若輪廓最大距離被底部心電圖 (ECG) 雜訊拉長，則以射線最大深度為基準限制 r_max
-    if max_ray_dist > 50 and cnt_r_max > max_ray_dist * 1.05:
-        r_max = int(np.ceil(max_ray_dist))
+    # 對純灰階 ECHO 前景執行閉運算並提取最大面積實心遮罩
+    echo_closed = cv2.morphologyEx(echo_fg, cv2.MORPH_CLOSE, kernel)
+    echo_contours, _ = cv2.findContours(echo_closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if echo_contours:
+        echo_max_cnt = max(echo_contours, key=cv2.contourArea)
+        echo_solid = np.zeros((h, w), dtype=np.uint8)
+        cv2.drawContours(echo_solid, [echo_max_cnt], -1, 255, -1)
     else:
-        r_max = int(np.ceil(cnt_r_max))
+        echo_solid = solid_mask
 
     start_angle = min(ang_l, ang_r)
     end_angle = max(ang_l, ang_r)
+    center = (int(round(cx)), int(round(cy)))
+
+    # 建立涵蓋夾角 [start_angle, end_angle] 的錐形遮罩並與 ECHO 實心遮罩取交集
+    cone_radius = int(np.hypot(w, h))
+    cone_mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.ellipse(cone_mask, center, (cone_radius, cone_radius), 0, start_angle, end_angle, 255, -1)
+    sector_fg = cv2.bitwise_and(echo_solid, cone_mask)
+
+    # 計算錐形交集前景的凸包頂點至 Apex 的最大歐氏距離作為 r_max
+    fg_ys, fg_xs = np.where(sector_fg > 0)
+    if len(fg_xs) > 0:
+        pts = np.column_stack((fg_xs, fg_ys)).astype(np.int32)
+        hull = cv2.convexHull(pts).reshape(-1, 2)
+        hull_dists = np.hypot(hull[:, 0] - cx, hull[:, 1] - cy)
+        r_max = int(np.ceil(np.max(hull_dists)))
+    else:
+        # 若交集前景為空，退回使用最大輪廓距離的 99.5 百分位
+        cnt_pts = max_cnt.reshape(-1, 2)
+        dists = np.hypot(cnt_pts[:, 0] - cx, cnt_pts[:, 1] - cy)
+        r_max = int(np.ceil(float(np.percentile(dists, 99.5))))
 
     # 繪製扇形 Mask（尖端保留至圓心，即 r_min = 0）
     mask = np.zeros((h, w), dtype=np.uint8)
-    center = (int(round(cx)), int(round(cy)))
     cv2.ellipse(mask, center, (r_max, r_max), 0, start_angle, end_angle, 255, -1)
 
     # 使用形態學膨脹向外擴張 expand_px 容錯
