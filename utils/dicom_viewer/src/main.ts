@@ -1,4 +1,14 @@
-import { decodeDicomFirstFrame } from './dicomDecoder';
+import { decodeDicomFirstFrame } from './dicomDecoder.ts';
+
+/**
+ * 將檔案名稱與幀數格式化為「檔名(幀數)」顯示字串
+ * @param fileName - DICOM 檔案名稱
+ * @param frameCount - 影像總幀數
+ * @returns 格式化後的顯示字串
+ */
+export function formatFileNameWithFrameCount(fileName: string, frameCount: number): string {
+  return `${fileName}(${frameCount})`;
+}
 
 /**
  * 渲染極簡 DICOM 第一幀檢視器介面（僅記憶體操作，無任何本地儲存）
@@ -85,8 +95,9 @@ function initApp(): void {
         const nameBar = document.createElement('div');
         nameBar.className =
           'px-3 py-2 border-t border-sky-100 bg-white text-xs font-medium text-slate-700 truncate';
-        nameBar.title = result.fileName;
-        nameBar.textContent = result.fileName;
+        const formattedName = formatFileNameWithFrameCount(result.fileName, result.frameCount);
+        nameBar.title = formattedName;
+        nameBar.textContent = formattedName;
 
         card.appendChild(frameBox);
         card.appendChild(nameBar);
@@ -108,4 +119,6 @@ function initApp(): void {
   window.addEventListener('beforeunload', clearGrid);
 }
 
-initApp();
+if (typeof document !== 'undefined') {
+  initApp();
+}

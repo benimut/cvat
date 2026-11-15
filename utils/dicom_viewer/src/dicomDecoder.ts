@@ -1,11 +1,24 @@
-import * as dicomParser from 'dicom-parser';
+import dicomParser from 'dicom-parser';
 
 /**
- * 第一幀解碼結果，僅包含記憶體中的畫布與檔案名稱
+ * 第一幀解碼結果，僅包含記憶體中的畫布、檔案名稱與總幀數
  */
 export interface DecodedFirstFrame {
   fileName: string;
   canvas: HTMLCanvasElement;
+  frameCount: number;
+}
+
+/**
+ * 從 DICOM DataSet 擷取影像總幀數 (0028,0008 Number of Frames)，無效或缺失時預設回傳 1
+ */
+export function extractFrameCount(dataSet: dicomParser.DataSet): number {
+  const raw = dataSet.string('x00280008')?.trim();
+  if (!raw || !/^\d+$/.test(raw)) {
+    return 1;
+  }
+  const parsed = Number.parseInt(raw, 10);
+  return parsed > 0 ? parsed : 1;
 }
 
 /**
@@ -309,5 +322,6 @@ export async function decodeDicomFirstFrame(file: File): Promise<DecodedFirstFra
   return {
     fileName: file.name,
     canvas,
+    frameCount: extractFrameCount(dataSet),
   };
 }
